@@ -45,16 +45,14 @@ enum settingSection: String, CaseIterable {
         }
     }
 }
-extension NSObject {
+
+
+final class SettingViewController: BaseViewController {
+    lazy var settingCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     typealias DataSource = UICollectionViewDiffableDataSource<settingSection, settingModel>
     typealias Snapshot = NSDiffableDataSourceSnapshot<settingSection, settingModel>
     typealias Registeration = UICollectionView.CellRegistration<UICollectionViewListCell, settingModel>
     typealias HeaderRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>
-}
-
-final class SettingViewController: BaseViewController {
-    lazy var settingCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-    
     var dataSource: DataSource!
     
     override func viewDidLoad() {
@@ -78,7 +76,7 @@ private extension SettingViewController {
      func createLayout() -> UICollectionViewLayout{ // 레이아웃 셋팅
         var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         configuration.backgroundColor = .white
-        configuration.showsSeparators = false
+        configuration.showsSeparators = true
         configuration.headerMode = .supplementary
         
         let layout = UICollectionViewCompositionalLayout.list(using: configuration)
@@ -87,7 +85,7 @@ private extension SettingViewController {
     }
      func configureDataSource() {
         var registeration: Registeration!
-        registeration = Registeration { cell, indexPath, itemIdentifier in
+        registeration = Registeration { cell, _, itemIdentifier in
             var content = UIListContentConfiguration.valueCell()
             content.image = UIImage(systemName: itemIdentifier.image)
             content.text = itemIdentifier.MainTitle
